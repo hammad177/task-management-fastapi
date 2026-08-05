@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from passlib.context import CryptContext
 
 from app.repositories import UserRepository
-from app.schemas import UserCreate, UserUpdate, UserResponse
+from app.schemas import UserCreate, UserUpdate, UserResponse, UserWithTasksResponse
 from app.core.security import create_access_token
 
 
@@ -60,6 +60,16 @@ class UserService:
             )
         
         return UserResponse.model_validate(user)
+    
+    async def get_user_with_tasks(self, user_id: int) -> UserWithTasksResponse:
+        """Get a single user by ID with their tasks loaded"""
+        user = await self.user_repository.get_by_id_with_tasks(user_id)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
+        return UserWithTasksResponse.model_validate(user)
     
     async def get_user(self, user_id: int) -> UserResponse:
         """Get a single user by ID"""

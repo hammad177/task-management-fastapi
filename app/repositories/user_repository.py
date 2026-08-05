@@ -1,6 +1,7 @@
 from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from app.models import User
 from app.schemas import UserCreate, UserUpdate
@@ -54,6 +55,19 @@ class UserRepository:
             .order_by(User.created_at.desc())
         )
         return result.scalars().all()
+    
+    
+    async def get_by_id_with_tasks(self, user_id: int) -> Optional[User]:
+        """
+        Get user by ID with their tasks loaded.
+        Uses selectinload to efficiently load related tasks.
+        """
+        result = await self.db.execute(
+            select(User)
+            .where(User.id == user_id)
+            .options(selectinload(User.tasks))
+        )
+        return result.scalar_one_or_none()
     
     async def update(self, user_id: int, user_data: UserUpdate) -> Optional[User]:
         """Update user by ID"""

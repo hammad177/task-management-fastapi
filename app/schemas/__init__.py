@@ -7,7 +7,8 @@ from .user import (
     UserUpdate,
     UserResponse,
     UserWithToken,
-    UserProfileUpdate
+    UserProfileUpdate,
+    UserWithTasksResponse
 )
 
 __all__ = [
@@ -23,4 +24,5 @@ __all__ = [
     "UserResponse",
     "UserWithToken",
     "UserProfileUpdate",
+    "UserWithTasksResponse",
 ]

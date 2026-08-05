@@ -1,6 +1,8 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
+
+from app.schemas.task import TaskResponse
 
 
 class UserBase(BaseModel):
@@ -69,6 +71,14 @@ class UserResponse(UserBase):
     updated_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)
+    
+
+class UserWithTasksResponse(UserResponse):
+    """Schema for user response with their tasks"""
+    tasks: List[TaskResponse] = Field(default_factory=list, description="User's tasks")
+
+    model_config = ConfigDict(from_attributes=True)
+
 
 
 class UserWithToken(UserResponse):

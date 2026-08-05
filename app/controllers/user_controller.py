@@ -1,8 +1,7 @@
-from typing import List, Optional
-from fastapi import HTTPException, status
+from typing import List
 
 from app.services import UserService
-from app.schemas import UserCreate, UserUpdate, UserResponse
+from app.schemas import UserCreate, UserUpdate, UserResponse, UserWithTasksResponse
 
 
 class UserController:
@@ -22,6 +21,9 @@ class UserController:
     async def get_user(self, user_id: int) -> UserResponse:
         """Get a user by ID"""
         return await self.user_service.get_user(user_id)
+    
+    async def get_user_with_tasks(self, user_id: int) -> UserWithTasksResponse:
+        return await self.user_service.get_user_with_tasks(user_id)
     
     async def get_current_user(self, user_id: int) -> UserResponse:
         """Get current user profile"""

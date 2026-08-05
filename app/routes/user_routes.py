@@ -71,6 +71,17 @@ async def get_current_user_profile(
         data=result
     )
 
+@router.get("/me/tasks")
+async def get_current_user_with_tasks(
+    current_user: User = Depends(get_current_user),
+    controller: UserController = Depends(get_user_controller),
+):
+    """Get current user profile with all their tasks"""
+    result = await controller.get_user_with_tasks(current_user.id)
+    return ApiResponseBuilder.success(
+        message="User profile with tasks retrieved successfully",
+        data=result
+    )
 
 @router.get("/")
 async def get_all_users(
